@@ -20,38 +20,77 @@
         android:background="@color/colorWhite"
         android:orientation="horizontal">
 
-        <Button
+        <RelativeLayout
             android:id="@+id/bt_fragment0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=""
-            android:background="@drawable/astatic"
-            android:layout_weight="1"
-            android:textSize="20sp" />
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_fragment0_0"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/astatic"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
-        <Button
+        <RelativeLayout
             android:id="@+id/bt_fragment1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/quality"
-            android:layout_weight="1"
-            android:textSize="20sp" />
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_fragment1_1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/quality"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
-        <Button
+        <RelativeLayout
             android:id="@+id/bt_fragment2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/warning"
-            android:layout_weight="1"
-            android:textSize="20sp" />
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_fragment2_2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/warning"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
-        <Button
+        <RelativeLayout
             android:id="@+id/bt_fragment3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/qrcode"
-            android:layout_weight="1"
-            android:textSize="20sp" />
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/bt_fragment3_3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/qrcode"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
     </LinearLayout>
 

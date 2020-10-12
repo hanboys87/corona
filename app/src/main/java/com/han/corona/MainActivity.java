@@ -70,16 +70,17 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    @OnClick({R.id.bt_fragment0,R.id.bt_fragment1,R.id.bt_fragment2,R.id.bt_fragment3}) void BottomTabButton(View v){
+
+    @OnClick({R.id.bt_fragment0,R.id.bt_fragment0_0,R.id.bt_fragment1,R.id.bt_fragment1_1,R.id.bt_fragment2,R.id.bt_fragment2_2,R.id.bt_fragment3,R.id.bt_fragment3_3}) void BottomTabButton(View v){
         int id = v.getId();
         Fragment fr =  new fragment_tab0();
-        if(id==R.id.bt_fragment0){
+        if(id==R.id.bt_fragment0 || id==R.id.bt_fragment0_0){
             fr = new fragment_tab0() ;
-        }else if(id==R.id.bt_fragment1){
+        }else if(id==R.id.bt_fragment1|| id==R.id.bt_fragment1_1){
             fr = new fragment_tab1() ;
-        }else if(id==R.id.bt_fragment2){
+        }else if(id==R.id.bt_fragment2|| id==R.id.bt_fragment2_2){
             fr = new fragment_tab2() ;
-        }else if(id==R.id.bt_fragment3){
+        }else if(id==R.id.bt_fragment3 || id==R.id.bt_fragment3_3){
             fr = new fragment_tab3() ;
         }
 
