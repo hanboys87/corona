@@ -9,9 +9,9 @@
     android:background="@color/colorWhite">
 
     <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@color/colorPrimary"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:src="@drawable/map"
         android:scaleType="fitXY"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">

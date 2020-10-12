@@ -6,8 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -28,22 +32,32 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     Context mContex;
-
+    public static String list_total_count;
+    private static MainHandler mHandler = null;
+    public static final int APP_NORMAL_START_MSG = 102;
     //private String[] Aread= new String[];
-    String[] Area = { "강남구","강동구","강북구","강서구","관악구","광진구","구로구",
-            "금천구","노원구","도봉구","동대문구","동작구","마포구","서대문구","서초구",
-            "성동구","성북구","송파구","양천구","영등포구","용산구","은평구","종로구","중구","중랑구"};
-    public static int[][] Area_Count = new int[3][25];
+
+    //"강서구","구로구", "양천구","영등포구", "마포구", "서초구", "강남구", "송파구",  "용산구",  "종로구" ,"중구", "성동구", "동대문구", "성북구"
+
+    public static String[] Area = {"강서구","구로구", "양천구","영등포구", "마포구", "서초구", "강남구", "송파구",  "용산구",  "종로구" ,"중구", "성동구", "동대문구", "성북구"};
+    public static int[][] Area_Count = new int[3][14];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        for(int i= 0 ;i <3 ; i++){
+            for(int j = 0 ; j<14 ;j++)
+                Area_Count[i][j] = 0;
+        }
         mContex = this;
-        //InitFragment();
+        mHandler = new MainHandler();
+
+        InitFragment();
 //        GetCoronaData mGetCoronaData = new GetCoronaData(mContex);
 //        mGetCoronaData.execute("");
-        DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask();
+        DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask(true);
         mDownloadFilesTask.execute();
         //GetData();
     }
@@ -52,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     void InitFragment(){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.fr_fragment, new fragment_tab0());
+        fragmentTransaction.add(R.id.fr_fragment, new fragment_tab2());
         fragmentTransaction.commit();
     }
 
@@ -77,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
     void GetData(){
         StringBuilder urlBuilder = new StringBuilder("http://openapi.seoul.go.kr:8088/45646f626d68616e31313273566d684f/json/Corona19Status/4501/5485/"); /*URL*/
-
-
         try {
             URL url = new URL(urlBuilder.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -99,6 +111,48 @@ public class MainActivity extends AppCompatActivity {
                 Responseline += line;
                 Log.e("HAN",line+"");
             }
+            InitData(Responseline);
+
+            rd.close();
+            conn.disconnect();
+
+            Message msg =  Message.obtain();
+            msg.what = APP_NORMAL_START_MSG;
+            sendDataMessage(msg);
+
+        }catch (Exception e){
+            Log.e("HAN",e+"");
+        }
+    }
+
+    void GetData(String last){
+
+//        String url = last;
+//        (Integer.parseInt(last)-999)
+        String url1 = "http://openapi.seoul.go.kr:8088/45646f626d68616e31313273566d684f/json/Corona19Status/"+ (Integer.parseInt(last)-999)+"/"+last;
+        Log.e("HAN",url1);
+        StringBuilder urlBuilder = new StringBuilder(url1); /*URL*/
+        try {
+            URL url = new URL(urlBuilder.toString());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-type", "application/json");
+            System.out.println("Response code: " + conn.getResponseCode());
+            BufferedReader rd;
+            if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+                rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+            StringBuilder sb = new StringBuilder();
+            String line;
+            String Responseline="";
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+                Responseline += line;
+                Log.e("HAN",line+"");
+            }
+            //InitData(Responseline);
             ReadData(Responseline);
             rd.close();
             conn.disconnect();
@@ -106,13 +160,20 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.e("HAN",e+"");
         }
-
-
     }
 
+
     private class DownloadFilesTask extends AsyncTask<URL, Integer, Long> {
+
+        boolean isStart = true;
+        DownloadFilesTask(boolean isStart){
+            this.isStart = isStart;
+        }
         protected Long doInBackground(URL... urls) {
-            GetData();
+            if(isStart)
+                GetData();
+            else
+                GetData(list_total_count);
             return null;
         }
 
@@ -122,6 +183,22 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Long result) {
             //showDialog("Downloaded " + result + " bytes");
+        }
+    }
+
+    void InitData(String allmsg){
+        JSONObject jsonResult;
+
+        try {
+            jsonResult = new JSONObject(allmsg);
+            jsonResult = new JSONObject(jsonResult.getString("Corona19Status"));
+            //Log.e("HAN: "," jsonResult.getString(list_total_count): "+ jsonResult.getString("list_total_count")+"");
+            list_total_count = jsonResult.getString("list_total_count");
+
+
+        }
+        catch (Exception e){
+            Log.e("HAN","e: "+e);
         }
     }
 
@@ -151,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 Long diff_day = differentDay(jsonPopupObject.getString("CORONA19_DATE"),getDate());
                 if(diff_day<3){
                     Log.e("HAN","3일 이내");
-                    for(int area_count = 0 ; area_count < 25 ; area_count++)
+                    for(int area_count = 0 ; area_count < 14 ; area_count++)
                     if(Area[area_count].equals(jsonPopupObject.getString("CORONA19_AREA"))){
                         int count = (int)(diff_day-0);
                         if(jsonPopupObject.getString("CORONA19_LEAVE_STATUS").equals(""))
@@ -198,6 +275,32 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat format1 = new SimpleDateFormat ( "MM.dd.");
         String today = format1.format(today_format);
         return today;
+    }
+
+    public static void sendDataMessage(Message msg) {
+        if(mHandler != null) {
+            mHandler.sendMessage(msg);
+        } else {
+
+        }
+    }
+
+
+
+    public class MainHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            int what = msg.what;
+            if (what == APP_NORMAL_START_MSG) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        DownloadFilesTask mDownloadFilesTask = new DownloadFilesTask(false);
+                        mDownloadFilesTask.execute();
+                    }
+                }, 200); // 1sec ->  200
+            }
+        }
     }
 
 

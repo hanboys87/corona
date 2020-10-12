@@ -15,39 +15,41 @@
         android:layout_weight="1"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorWhite"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/bt_fragment0"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch Fragment"
+            android:layout_height="match_parent"
+            android:text=""
+            android:background="@drawable/astatic"
             android:layout_weight="1"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/bt_fragment1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch Fragment"
+            android:layout_height="match_parent"
+            android:background="@drawable/quality"
             android:layout_weight="1"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/bt_fragment2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch Fragment"
+            android:layout_height="match_parent"
+            android:background="@drawable/warning"
             android:layout_weight="1"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/bt_fragment3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Switch Fragment"
+            android:layout_height="match_parent"
+            android:background="@drawable/qrcode"
             android:layout_weight="1"
             android:textSize="20sp" />
 
