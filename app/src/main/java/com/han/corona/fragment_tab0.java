@@ -49,7 +49,7 @@ public class fragment_tab0 extends Fragment {
 
     private void setBarChart() {
         chart2.clearChart();
-        int index = 2;
+        int index = 1;
 
         chart2.addBar(new BarModel("강서구", Float.parseFloat(Integer.toString(MainActivity.Area_Count[index][0])), 0xFF56B7F1));
         chart2.addBar(new BarModel("구로구", Float.parseFloat(Integer.toString(MainActivity.Area_Count[index][1])), 0xFF56B7F1));

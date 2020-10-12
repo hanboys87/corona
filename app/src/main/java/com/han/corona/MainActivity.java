@@ -226,9 +226,16 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < data.length(); i++) {
                 JSONObject jsonPopupObject = data.getJSONObject(i);
 
-                Long diff_day = differentDay(jsonPopupObject.getString("CORONA19_DATE"),getDate());
+                //Long diff_day = differentDay(jsonPopupObject.getString("CORONA19_MDATE").substring(0,10),getDate());
+
+                String temp = jsonPopupObject.getString("CORONA19_DATE");
+                if(temp.length()==5)
+                    temp = "0"+temp;
+
+                Long diff_day = differentDay(temp,getDate());
+                diff_day = diff_day - 3;
                 if(diff_day<3){
-                    Log.e("HAN","3일 이내");
+                    Log.e("HAN","diff_day: "+diff_day);
                     for(int area_count = 0 ; area_count < 14 ; area_count++)
                     if(Area[area_count].equals(jsonPopupObject.getString("CORONA19_AREA"))){
                         int count = (int)(diff_day-0);
@@ -236,8 +243,6 @@ public class MainActivity extends AppCompatActivity {
                             Area_Count[count][area_count] += 1;
                     }
                 }
-
-
             }
 
         }
@@ -249,20 +254,21 @@ public class MainActivity extends AppCompatActivity {
     public long differentDay(String PreviousData, String CurrentData){
         long diff_Day=0;
         try{
+//            if(PreviousData.length()==5){
+//                PreviousData = "0"+PreviousData;
+//            }
             Log.e("HAN","PreviousData: "+PreviousData);
             Log.e("HAN","CurrentData: "+CurrentData);
 
+            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat format = new SimpleDateFormat("MM.dd.");
             Date FirstDate = format.parse(PreviousData);
             Date SecondDate = format.parse(CurrentData);
 
-//            Log.e("HAN","FirstDate: "+FirstDate);
-//            Log.e("HAN","SecondDate: "+SecondDate);
-            long calDate = SecondDate.getTime() - FirstDate.getTime();
             Log.e("HAN","FirstDate: "+FirstDate);
             Log.e("HAN","SecondDate: "+SecondDate);
+            long calDate = SecondDate.getTime() - FirstDate.getTime();
             diff_Day = calDate / ( 24*60*60*1000);
-            Log.e("HAN","diff_Day: "+diff_Day);
             return diff_Day;
         }
         catch(ParseException e)
@@ -273,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
 
     public String getDate(){
         Date today_format = new Date();
-        SimpleDateFormat format1 = new SimpleDateFormat ( "MM.dd.");
+        //SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd");
+        SimpleDateFormat format1 = new SimpleDateFormat("MM.dd.");
         String today = format1.format(today_format);
         return today;
     }
